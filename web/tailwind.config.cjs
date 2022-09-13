@@ -1,10 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './src/**/*.tsx'
+    './src/**/*.tsx',
+    './index.html'
   ],
   theme: {
-    extend: {}
+    extend: {
+      backgroundImage: {
+        backgroundGalaxy: "url(/background-galaxy.png)"
+      }
+    }
   },
   plugins: []
 }
