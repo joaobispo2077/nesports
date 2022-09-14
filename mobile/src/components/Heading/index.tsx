@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react';
-import { View, ActivityIndicator, ViewProps, Text } from 'react-native';
+import { FunctionComponent } from 'react';
+import { View, ViewProps, Text } from 'react-native';
 
 import { styles } from './styles';
 
