@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import { Image, View } from 'react-native';
+import { FlatList, Image, SafeAreaView, View } from 'react-native';
 
 import logoImage from '../../assets/logo-nlw-esports.png';
 import { Gamecard } from '../../components/Gamecard';
@@ -16,12 +16,23 @@ export const Home: FunctionComponent = () => {
         subtitle="Selecione o game que deseja jogar..."
       />
 
-      <Gamecard
-        data={{
-          ads: GAMES[0].ads,
-          image: GAMES[0].cover,
-          title: GAMES[0].name,
-        }}
+      <FlatList
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.cardList}
+        data={GAMES}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <SafeAreaView style={styles.cardItem}>
+            <Gamecard
+              data={{
+                ads: item.ads,
+                image: item.cover,
+                title: item.name,
+              }}
+            />
+          </SafeAreaView>
+        )}
       />
     </View>
   );

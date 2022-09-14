@@ -6,4 +6,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: { width: 214, height: 120, marginTop: 74, marginBottom: 48 },
+  cardList: {
+    paddingLeft: 32,
+    paddingRight: 64,
+  },
+  cardItem: {
+    marginRight: 32,
+  },
 });
