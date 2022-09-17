@@ -5,8 +5,10 @@
   "main": "src/server.js",
   "scripts": {
     "build": "tsc",
-    "dev": "tsnd src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsnd --exit-child src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "workbench": "npx prisma studio",
+    "migration": "npx prisma migration dev"
   },
   "keywords": [],
   "author": "",
