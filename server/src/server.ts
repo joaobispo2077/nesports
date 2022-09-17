@@ -3,13 +3,11 @@ import express from 'express';
 const app = express();
 
 app.get('/', (req, res) => {
-
-  console.log("hello world");
+  console.log('hello world');
   res.json({ message: 'Hello World!' });
 });
 
 app.get('/ads', (req, res) => {
-
   res.json([{ name: 'Anúncio 1' }]);
 });
 
