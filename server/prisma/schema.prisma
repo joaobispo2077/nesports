@@ -11,9 +11,27 @@ datasource db {
 }
 
 model Game {
-  id        Int      @id
+  id        String   @id
   name      String
   bannerUrl String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  ads Ad[]
+}
+
+model Ad {
+  id               String   @id
+  name             String
+  yearsPlaying     Int
+  discord          String
+  weekDays         String
+  hoursStart       Int
+  hoursEnd         Int
+  useVoicheChannel Boolean
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  gameId           String
+
+  game Game @relation(fields: [gameId], references: [id])
 }
