@@ -17,6 +17,7 @@ export type Duo = {
 
 export type DuocardProps = {
   data: Duo;
+  onConnect: () => void;
 };
 
 export const Duocard: FunctionComponent<DuocardProps> = ({
@@ -28,6 +29,7 @@ export const Duocard: FunctionComponent<DuocardProps> = ({
     hoursStart,
     hoursEnd,
   },
+  onConnect,
 }) => {
   return (
     <View style={styles.container}>
@@ -45,7 +47,7 @@ export const Duocard: FunctionComponent<DuocardProps> = ({
         }`}
       />
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={onConnect}>
         <GameController color={THEME.COLORS.TEXT} size={20} />
         <Text style={styles.buttonText}>Conectar</Text>
       </TouchableOpacity>
