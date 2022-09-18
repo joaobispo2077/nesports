@@ -13,7 +13,7 @@ import { styles } from './styles';
 
 export type GamecardProps = {
   title: string;
-  ads: string;
+  ads: number;
   image: string;
 };
 
@@ -27,10 +27,7 @@ export const Gamecard: FunctionComponent<Props> = ({
 }) => {
   return (
     <TouchableOpacity style={styles.container} {...restProps}>
-      <ImageBackground
-        source={image as ImageSourcePropType}
-        style={styles.cover}
-      >
+      <ImageBackground source={{ uri: image }} style={styles.cover}>
         <LinearGradient colors={THEME.COLORS.FOOTER} style={styles.footer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.ads}>{ads} anúncios</Text>

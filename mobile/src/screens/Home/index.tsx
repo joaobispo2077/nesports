@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { FlatList, Image, SafeAreaView, View } from 'react-native';
 
 import logoImage from '../../assets/logo-nlw-esports.png';
@@ -7,7 +7,29 @@ import { Heading } from '../../components/Heading';
 import { GAMES } from '../../utils/games';
 import { styles } from './styles';
 
+export interface Game {
+  id: string;
+  name: string;
+  bannerUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  _count: Count;
+}
+
+export interface Count {
+  ads: number;
+}
+
 export const Home: FunctionComponent = () => {
+  const [games, setGames] = useState<Game[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3002/games')
+      .then((response) => response.json())
+      .then((data) => setGames(data))
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <View style={styles.container}>
       <Image source={logoImage} style={styles.logo} />
@@ -20,14 +42,14 @@ export const Home: FunctionComponent = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.cardList}
-        data={GAMES}
+        data={games}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <SafeAreaView style={styles.cardItem}>
             <Gamecard
               data={{
-                ads: item.ads,
-                image: item.cover,
+                ads: item._count.ads,
+                image: item.bannerUrl,
                 title: item.name,
               }}
             />
