@@ -15,7 +15,7 @@ export const GameBanner: FunctionComponent<GameBannerProps> = ({
     <a
       key={name}
       href={bannerUrl}
-      className="relative rounded-lg overflow-hidden"
+      className="relative rounded-lg overflow-hidden cursor-pointer"
     >
       <img src={bannerUrl} alt="game1" />
 
