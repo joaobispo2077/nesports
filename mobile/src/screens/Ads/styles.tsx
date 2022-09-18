@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { THEME } from '../../styles/themes';
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -37,5 +39,15 @@ export const styles = StyleSheet.create({
     paddingLeft: 32,
     paddingRight: 64,
     alignItems: 'flex-start',
+  },
+  emptyList: {
+    color: THEME.COLORS.CAPTION_300,
+    fontSize: THEME.FONT_SIZE.SM,
+    fontFamily: THEME.FONT_FAMILY.REGULAR,
+  },
+  contentEmptyList: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

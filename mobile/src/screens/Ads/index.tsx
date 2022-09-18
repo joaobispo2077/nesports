@@ -1,7 +1,7 @@
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FunctionComponent, useEffect, useState } from 'react';
-import { FlatList, Image, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Game } from '../../@types/navigation';
@@ -76,8 +76,15 @@ export const Ads: FunctionComponent = () => {
             </SafeAreaView>
           )}
           style={styles.contentContainerList}
-          contentContainerStyle={styles.contentList}
+          contentContainerStyle={
+            ads.length > 0 ? styles.contentList : styles.contentEmptyList
+          }
           showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <Text style={styles.emptyList}>
+              Não há anuncios publicados para esse jogo
+            </Text>
+          )}
         />
       </SafeAreaView>
     </Background>
