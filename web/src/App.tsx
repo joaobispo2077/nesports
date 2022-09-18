@@ -2,16 +2,30 @@ import './styles/main.css';
 
 import { GameBanner } from './components/GameBanner';
 import { CreateAdBanner } from './components/CreateAdBanner';
+import { useEffect, useState } from 'react';
+
+export interface Game {
+  id: string;
+  name: string;
+  bannerUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  _count: Count;
+}
+
+export interface Count {
+  ads: number;
+}
 
 function App() {
-  const games = [
-    '/assets/games/game-1.png',
-    '/assets/games/game-2.png',
-    '/assets/games/game-3.png',
-    '/assets/games/game-4.png',
-    '/assets/games/game-5.png',
-    '/assets/games/game-6.png',
-  ];
+  const [games, setGames] = useState<Game[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3002/games')
+      .then(async (response) => await response.json())
+      .then((response) => setGames(response))
+      .catch((error) => console.error(error));
+  }, []);
 
   return (
     <div className="max-w-[1344px] mx-auto flex flex-col items-center my-20">
@@ -28,10 +42,10 @@ function App() {
       <div className="grid grid-cols-6 gap-6 mt-16">
         {games.map((game) => (
           <GameBanner
-            key={game}
-            ads={Math.floor(Math.random() * 1000)}
-            name="Paladins"
-            bannerUrl={game}
+            key={game.id}
+            ads={game._count.ads}
+            name={game.name}
+            bannerUrl={game.bannerUrl}
           />
         ))}
       </div>
