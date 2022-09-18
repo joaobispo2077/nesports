@@ -1,10 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
 import { FunctionComponent, useEffect, useState } from 'react';
-import { FlatList, Image, SafeAreaView, View } from 'react-native';
+import { FlatList, Image, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import logoImage from '../../assets/logo-nlw-esports.png';
+import { Background } from '../../components/Background';
 import { Gamecard } from '../../components/Gamecard';
 import { Heading } from '../../components/Heading';
-import { GAMES } from '../../utils/games';
 import { styles } from './styles';
 
 export interface Game {
@@ -22,6 +24,7 @@ export interface Count {
 
 export const Home: FunctionComponent = () => {
   const [games, setGames] = useState<Game[]>([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetch('http://localhost:3002/games')
@@ -30,32 +33,39 @@ export const Home: FunctionComponent = () => {
       .catch((error) => console.log(error));
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <Image source={logoImage} style={styles.logo} />
-      <Heading
-        title="Encontre seu duo!"
-        subtitle="Selecione o game que deseja jogar..."
-      />
+  const handleOpenGame = (game: Game) => {
+    navigation.navigate('ads', game);
+  };
 
-      <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.cardList}
-        data={games}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <SafeAreaView style={styles.cardItem}>
-            <Gamecard
-              data={{
-                ads: item._count.ads,
-                image: item.bannerUrl,
-                title: item.name,
-              }}
-            />
-          </SafeAreaView>
-        )}
-      />
-    </View>
+  return (
+    <Background>
+      <SafeAreaView style={styles.container}>
+        <Image source={logoImage} style={styles.logo} />
+        <Heading
+          title="Encontre seu duo!"
+          subtitle="Selecione o game que deseja jogar..."
+        />
+
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.cardList}
+          data={games}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <SafeAreaView style={styles.cardItem}>
+              <Gamecard
+                data={{
+                  ads: item._count.ads,
+                  image: item.bannerUrl,
+                  title: item.name,
+                }}
+                onPress={() => handleOpenGame(item)}
+              />
+            </SafeAreaView>
+          )}
+        />
+      </SafeAreaView>
+    </Background>
   );
 };

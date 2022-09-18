@@ -2,7 +2,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { FunctionComponent } from 'react';
 import {
   ImageBackground,
-  ImageSourcePropType,
   Text,
   TouchableOpacity,
   TouchableOpacityProps,
