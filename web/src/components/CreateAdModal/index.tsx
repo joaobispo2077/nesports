@@ -1,4 +1,5 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { FormEvent, FunctionComponent, useEffect, useState } from 'react';
 import { Check, GameController } from 'phosphor-react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Checkbox from '@radix-ui/react-checkbox';
@@ -6,19 +7,58 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { Input } from '../Forms/Input';
 import { Game } from '../../App';
 import { weekDays } from '../../utils/weekDays';
+import axios from 'axios';
 
 export const CreateAdModal: FunctionComponent = () => {
   const [games, setGames] = useState<Game[]>([]);
+
+  const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>(false);
   const [selectedWeekDays, setSelectedWeekDays] = useState<string[]>([]);
 
   const handleSelectWeekDay = (weekDays: string[]) => {
     setSelectedWeekDays(weekDays);
   };
 
+  const handleCheckboxChange = (checked: Checkbox.CheckedState) => {
+    setUseVoiceChannel(checked === true);
+  };
+
+  const handleCreateAd = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('create ad', event.currentTarget);
+
+    const formData = new FormData(event.currentTarget);
+    console.log('formData', formData);
+    const data = Object.fromEntries(formData);
+    console.log('data', data);
+    console.log('selectedWeekDays', selectedWeekDays);
+    console.log('useVoiceChannel', useVoiceChannel);
+
+    if (!data.name) {
+      return;
+    }
+
+    try {
+      await axios.post(`http://localhost:3002/games/${data.gameId}/ads`, {
+        name: data.name,
+        discord: data.discord,
+        yearsPlaying: Number(data.yearsPlaying),
+        hoursStart: data.hoursStart,
+        hoursEnd: data.hoursEnd,
+        useVoiceChannel,
+        weekDays: selectedWeekDays,
+      });
+      alert('Anúncio criado com sucesso!');
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao criar anúncio!');
+    }
+  };
+
   useEffect(() => {
-    fetch('http://localhost:3002/games')
-      .then(async (response) => await response.json())
-      .then((response) => setGames(response))
+    axios
+      .get('http://localhost:3002/games')
+      .then((response) => setGames(response.data))
       .catch((error) => console.error(error));
   }, []);
 
@@ -29,13 +69,14 @@ export const CreateAdModal: FunctionComponent = () => {
         <Dialog.Title className="text-3xl font-black">
           Publique um anúncio
         </Dialog.Title>
-        <form className="mt-8 flex flex-col gap-4">
+        <form className="mt-8 flex flex-col gap-4" onSubmit={handleCreateAd}>
           <div className="flex flex-col gap-2">
             <label htmlFor="game" className="font-semibold">
               Qual o game?
             </label>
             <select
               id="game"
+              name="gameId"
               className="bg-zinc-900 py-3 px-4 rounded text-sm placeholder:text-zinc-500"
               placeholder="Selecione o game que deseja jogar"
             >
@@ -55,6 +96,7 @@ export const CreateAdModal: FunctionComponent = () => {
               Qual o seu nome (ou nickname)?
             </label>
             <Input
+              name="name"
               id="name"
               type="text"
               placeholder="Como te chamam dentro do jogo"
@@ -67,6 +109,7 @@ export const CreateAdModal: FunctionComponent = () => {
                 Joga há quantos anos?
               </label>
               <Input
+                name="yearsPlaying"
                 id="yearsPlaying"
                 type="number"
                 placeholder="Tudo bem ser ZERO"
@@ -77,7 +120,12 @@ export const CreateAdModal: FunctionComponent = () => {
               <label className="font-semibold" htmlFor="discord">
                 Qual seu Discord?
               </label>
-              <Input id="discord" type="text" placeholder="nickname#0000" />
+              <Input
+                name="discord"
+                id="discord"
+                type="text"
+                placeholder="nickname#0000"
+              />
             </div>
           </div>
 
@@ -114,14 +162,28 @@ export const CreateAdModal: FunctionComponent = () => {
                 Qual horário do dia?
               </label>
               <div className="grid grid-cols-2 gap-2">
-                <Input id="hourStart" type="time" placeholder="De" />
-                <Input id="hourEnd" type="time" placeholder="Até" />
+                <Input
+                  name="hoursStart"
+                  id="hoursStart"
+                  type="time"
+                  placeholder="De"
+                />
+                <Input
+                  name="hoursEnd"
+                  id="hoursEnd"
+                  type="time"
+                  placeholder="Até"
+                />
               </div>
             </div>
           </div>
 
           <div className="mt-2 flex gap-2 text-sm cursor-pointer">
-            <Checkbox.Root className="w-6 h-6 p-1 rounded bg-zinc-900">
+            <Checkbox.Root
+              className="w-6 h-6 p-1 rounded bg-zinc-900"
+              checked={useVoiceChannel}
+              onCheckedChange={handleCheckboxChange}
+            >
               <Checkbox.Indicator>
                 <Check className="w-4 h-4 text-emerald-400" />
               </Checkbox.Indicator>

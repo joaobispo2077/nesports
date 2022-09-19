@@ -21,17 +21,17 @@ model Game {
 }
 
 model Ad {
-  id               String   @id @default(uuid())
-  name             String
-  yearsPlaying     Int
-  discord          String
-  weekDays         String
-  hoursStart       Int
-  hoursEnd         Int
-  useVoicheChannel Boolean
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  gameId           String
+  id              String   @id @default(uuid())
+  name            String
+  yearsPlaying    Int
+  discord         String
+  weekDays        String
+  hoursStart      Int
+  hoursEnd        Int
+  useVoiceChannel Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  gameId          String
 
   game Game @relation(fields: [gameId], references: [id])
 }
