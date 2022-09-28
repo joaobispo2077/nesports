@@ -8,6 +8,7 @@ import { Game } from '../../@types/navigation';
 import logoImage from '../../assets/logo-nlw-esports.png';
 import { Background } from '../../components/Background';
 import { Duocard } from '../../components/Duocard';
+import { Duomatch } from '../../components/Duomatch';
 import { Heading } from '../../components/Heading';
 import { THEME } from '../../styles/themes';
 import { styles } from './styles';
@@ -26,6 +27,7 @@ export type Ad = {
 
 export const Ads: FunctionComponent = () => {
   const [ads, setAds] = useState<Ad[]>([]);
+  const [selectedDiscordDuo, setSelectedDiscordDuo] = useState('');
 
   const route = useRoute();
   const navigation = useNavigation();
@@ -33,6 +35,17 @@ export const Ads: FunctionComponent = () => {
 
   const handleGoBack = () => {
     navigation.goBack();
+  };
+
+  const getDiscordUser = (adsId: string) => {
+    fetch(`http://localhost:3002/ads/${adsId}/discord`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        return data;
+      })
+      .then((data) => setSelectedDiscordDuo(data.discord))
+      .catch((error) => console.log(error));
   };
 
   useEffect(() => {
@@ -72,7 +85,7 @@ export const Ads: FunctionComponent = () => {
           horizontal
           renderItem={({ item }) => (
             <SafeAreaView style={styles.duoCard}>
-              <Duocard data={item} onConnect={() => console.log(item)} />
+              <Duocard data={item} onConnect={() => getDiscordUser(item.id)} />
             </SafeAreaView>
           )}
           style={styles.contentContainerList}
@@ -85,6 +98,12 @@ export const Ads: FunctionComponent = () => {
               Não há anuncios publicados para esse jogo
             </Text>
           )}
+        />
+
+        <Duomatch
+          visible={selectedDiscordDuo.length > 0}
+          onClose={() => setSelectedDiscordDuo('')}
+          discord={selectedDiscordDuo}
         />
       </SafeAreaView>
     </Background>
